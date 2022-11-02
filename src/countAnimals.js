@@ -2,10 +2,9 @@ const data = require('../data/zoo_data'); // 1 objeto com 2 arrays (species e em
 
 const { species } = data; // 1 array com 9 objetos
 
-const { residents } = species;
-
 function countAnimals(animal) {
   // seu código aqui
+  // se o parametro estiver vazio retornar:
   if (animal === undefined) {
     const obj = {};
     species.forEach((specie) => {
@@ -13,11 +12,15 @@ function countAnimals(animal) {
     });
     return obj;
   }
-  const filtroSpecie = species.filter((specie) => specie.name === specie.animal);
-  // const quantidadeSpecie = filtroSpecie.find((filtro) => filtro.residents.length);
-  return filtroSpecie;
+  // se não tiver o sexo do animal retornar:
+  if (animal.sex === undefined) {
+    const quantiaEspecie = species.find((specie) => specie.name === animal.specie);
+    return quantiaEspecie.residents.length;
+  }
+  const nome = species.find((specie) => specie.name === animal.specie).residents
+    .filter((resident) => resident.sex === animal.sex).length;
+  return nome;
 }
-
-console.log(countAnimals({ specie: 'lions' }));
+console.log(countAnimals({ specie: 'giraffes', sex: 'female' }));
 
 module.exports = countAnimals;

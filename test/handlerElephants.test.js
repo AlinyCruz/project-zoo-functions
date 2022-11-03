@@ -10,7 +10,7 @@ describe('Testes da função HandlerElephants', () => {
   });
 
   it('Para o argumento averageAge deve retornar um número próximo a 10.5', () => {
-    expect(handlerElephants('averageAge')).toBeCloseto(10.5);
+    expect(handlerElephants('averageAge')).toBeCloseTo(10.5);
   });
 
   it('Para o argumento location deve retornar a string NW', () => {

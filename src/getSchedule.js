@@ -8,7 +8,7 @@ const diasDaSemana = (paramDia) => {
   const diaDaSemana = semana.find((dia) => dia === paramDia);
   return diaDaSemana;
 };
-//console.log(diasDaSemana('Tuesday')); // retorna o dia digitado como parâmetro -> Tuesday
+// console.log(diasDaSemana('Tuesday')); // retorna o dia digitado como parâmetro -> Tuesday
 
 //----------------------------------------------------------------------------------------------
 
@@ -23,26 +23,31 @@ const diasDoAnimal = (paramAnimal) => {
 //----------------------------------------------------------------------------------------------
 
 const retornoObjetoDiaDaSemana = (dia) => {
+  const obj = {};
   const abertura = hours[dia].open; // open -> 8
   const fechamento = hours[dia].close; // close -> 6
-  return `${diasDaSemana('Tuesday')} : {
-    officeHour: Open from ${abertura}am until ${fechamento}pm,
-    exhibition: ${diasDoAnimal('Tuesday').split()},
-  }`;
+  obj[diasDaSemana(dia)] = {
+    officeHour: `Open from ${abertura}am until ${fechamento}pm`,
+    exhibition: diasDoAnimal(dia),
+  };
+  return obj;
 };
+
 // console.log(retornoObjetoDiaDaSemana(diasDaSemana('Tuesday'))); // retorna o objeto com informações do dia digitado -> dia - horário que abre e fecha - animais desse dia.
 
 //----------------------------------------------------------------------------------------------
 
-const semParametro = (dia) => {
-  const abertura = hours[dia].open; // open -> 8
-  const fechamento = hours[dia].close; // close -> 6
-  for (let i = 0; i < species.length; i += 1) {
-    return `${diasDaSemana(dia)} : {
-      officeHour: Open from ${abertura}am until ${fechamento}pm,
-      exhibition: [${diasDoAnimal(dia)}],
-    }`;
-  }
+const semParametro = () => {
+  const obj = {};
+  const dias = Object.keys(hours);
+  for (let i = 0; i < dias.length; i += 1) {
+    const abertura = hours[dias[i]].open; // open -> 8
+    const fechamento = hours[dias[i]].close; // close -> 6
+    obj[diasDaSemana(dias[i])] = {
+      officeHour: `Open from ${abertura}am until ${fechamento}pm`,
+      exhibition: diasDoAnimal(dias[i]),
+    };
+  } return obj;
 };
 //  console.log(semParametro(diasDaSemana('Thursday')));
 
@@ -50,18 +55,19 @@ const semParametro = (dia) => {
 
 function getSchedule(scheduleTarget) {
   // RETORNO PARA SEM PARÂMETRO OU INDEFINIDO
-  // if (scheduleTarget !== diasDaSemana() || scheduleTarget !== diasDoAnimal() || !scheduleTarget) {
-  //   return semParametro();
-  // };
-  // // RETORNO PARA PARÂMETRO : DIA DA SEMANA
-  // if (scheduleTarget === diasDaSemana() && scheduleTarget === diasDoAnimal()) {
-  //   return retornoObjetoDiaDaSemana(diasDaSemana());
-  // };
+  if ((scheduleTarget !== diasDaSemana(scheduleTarget) && scheduleTarget
+  !== diasDoAnimal(scheduleTarget)) || !scheduleTarget) {
+    return semParametro();
+  }
+  // RETORNO PARA PARÂMETRO : DIA DA SEMANA
+  if (scheduleTarget === diasDaSemana(scheduleTarget)) {
+    return retornoObjetoDiaDaSemana(scheduleTarget);
+  }
   // RETORNO PARA PARÂMETRO : ANIMAL
-  const arrayDias = species.filter((dia) => dia.name === scheduleTarget)
+  return species.filter((dia) => dia.name === scheduleTarget)
     .find((animal) => animal.availability).availability;
-  return arrayDias; // ['Wednesday','Friday','Saturday','Tuesday']
-};
+  // ['Wednesday','Friday','Saturday','Tuesday']
+}
 console.log(getSchedule());
 
 module.exports = getSchedule;
